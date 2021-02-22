@@ -9,7 +9,7 @@
  */
 
 // import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import {LitElement, html, css} from 'lit-element';
+import {LitElement, html, css, supportsAdoptingStyleSheets} from 'lit-element';
 import './shared-styles.js';
 //<script src="https://unpkg.com/axios/dist/axios.min.js"/>; //</script>
 // import axios from 'axios';
@@ -97,18 +97,17 @@ static get properties(){
       tstate: { type: String},
       todos : { type : Array},
       data: { type : Object},
-      arr: { type: Array}
+      arr: { type: Array},
+      dict:  {type : Array}
+    
   };
 }
-// connectedCallback() {
-//   super.connectedCallback();
-//   this.fetchData();
-
-// }
 
 firstUpdated(changedProperties) {
-  super.firstUpdated(changedProperties);
-  this.fetchData();
+  if (super.firstUpdated) {
+    super.firstUpdated(changedProperties);
+    this.fetchData();
+  } 
 }
 
 fetchData() {
@@ -130,9 +129,12 @@ fetchData() {
   fetch("https://jsonplaceholder.typicode.com/todos?_limit=5")
   .then(response => response.json())
   .then(data => console.log(data));
+    console.log(this.dict)
+  
 }
 
-//  async  initiaty(){
+
+  // async  initiaty(){
 //   let arr = []
 //   fetch("https://jsonplaceholder.typicode.com/todos?_limit=5")
 //   .then(response => { 
@@ -160,6 +162,13 @@ constructor(props){
   this.item = '',
   this.tstate = '',
   this.task = ''
+  this.dict = [{ '34': 'thirty-four', '90': 'ninety',
+  '91': 'ninety-one','21': 'twenty-one',
+  '61': 'sixty-one', '9': 'nine',
+  '2': 'two', '6': 'six', '3': 'three',
+  '8': 'eight', '80': 'eighty', '81': 'eighty-one',
+  'Ninety-Nine': '99', 'nine-hundred': '900'} 
+  ]
 }
 
 render() {
@@ -180,9 +189,15 @@ render() {
   </div>
   </div>
   </div>
+  <div class="">
+  <ul>
+      ${this.dict.sort(i => html`<li>${i}</li>`)}
+  </ul>
+  </div>
+  </div>
   </div>
   `;
-}
+}     
   // if (!this.data) {
   //     return html`
   //         <h4>Loading...</h4>
@@ -198,10 +213,5 @@ render() {
 
 window.customElements.define('my-view3', MyView3);
 
-// Dictionary = {'34': 'thirty-four', '90': 'ninety',
-// '91': 'ninety-one','21': 'twenty-one',
-// '61': 'sixty-one', '9': 'nine',
-// '2': 'two', '6': 'six', '3': 'three',
-// '8': 'eight', '80': 'eighty', '81': 'eighty-one',
-// 'Ninety-Nine': '99', 'nine-hundred': '900'}
+
 
